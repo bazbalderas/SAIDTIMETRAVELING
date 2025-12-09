@@ -124,8 +124,7 @@ class VisualizadorGrafo:
             # Para grafos grandes, usar layout más rápido
             self.posiciones = nx.spring_layout(self.grafo, k=1, iterations=30, seed=42)
         else:
-            # Para grafos pequeños, usar spring layout de mejor calidad
-            # kamada_kawai requiere scipy, por lo que usamos spring como alternativa confiable
+            # Para grafos pequeños, usar spring layout de mejor calidad con más iteraciones
             self.posiciones = nx.spring_layout(self.grafo, k=1, iterations=50, seed=42)
         
         # Dibujar aristas (conflictos)

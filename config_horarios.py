@@ -15,7 +15,7 @@ HORAS_INICIO = [
     "13:25", "14:20", "15:15", "16:10", "17:05", "18:00", "18:55", "19:50"
 ]
 
-SLOTS_POR_DIA = 15  # Debe coincidir con scheduler.cpp
+SLOTS_POR_DIA = 15  # Debe coincidir con scheduler.cpp (actualizar ambos si se cambia)
 TOTAL_TIMESLOTS = NUM_DIAS * SLOTS_POR_DIA  # 5 días × 15 horas = 75 timeslots
 
 DURACION_BLOQUE_MINUTOS = 55
