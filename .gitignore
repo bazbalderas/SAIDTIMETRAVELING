@@ -41,3 +41,9 @@ Horario_Generado.xlsx
 
 # Test outputs
 /tmp/
+test_*.png
+test_*.xlsx
+test_*.html
+grafo_conflictos.png
+horarios_completos.xlsx
+horarios_completos.html
