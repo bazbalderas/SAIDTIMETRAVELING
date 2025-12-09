@@ -42,15 +42,18 @@ echo "✓ Todas las dependencias están instaladas"
 echo ""
 echo "🔨 Verificando compilación de módulos Cython..."
 
-if [ ! -f "cython_modules/graph_scheduler.cpython"*".so" ] && [ ! -f "cython_modules/graph_scheduler.pyd" ]; then
-    echo "⚠️  Módulos no compilados. Compilando..."
-    python3 setup.py build_ext --inplace
-    
-    if [ $? -ne 0 ]; then
-        echo "❌ Error al compilar módulos"
-        echo "   Revisa que tengas gcc/g++ instalado:"
-        echo "   sudo apt-get install build-essential"
-        exit 1
+# Buscar archivos .so o .pyd de manera más robusta
+if ! ls cython_modules/graph_scheduler*.so 2>/dev/null | grep -q .; then
+    if ! ls cython_modules/graph_scheduler*.pyd 2>/dev/null | grep -q .; then
+        echo "⚠️  Módulos no compilados. Compilando..."
+        python3 setup.py build_ext --inplace
+        
+        if [ $? -ne 0 ]; then
+            echo "❌ Error al compilar módulos"
+            echo "   Revisa que tengas gcc/g++ instalado:"
+            echo "   sudo apt-get install build-essential"
+            exit 1
+        fi
     fi
 fi
 

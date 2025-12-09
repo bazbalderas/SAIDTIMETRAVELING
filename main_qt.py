@@ -683,7 +683,13 @@ y cada arista representa un conflicto (mismo profesor o grupo en el mismo horari
         self.tabla_asignaciones.setRowCount(len(asignaciones))
         
         for i, asig in enumerate(asignaciones):
-            evento = self.sistema.eventos[asig['evento_id']]
+            evento_id = asig['evento_id']
+            
+            # Validar que el evento_id esté en rango
+            if evento_id < 0 or evento_id >= len(self.sistema.eventos):
+                continue
+            
+            evento = self.sistema.eventos[evento_id]
             
             self.tabla_asignaciones.setItem(i, 0, QTableWidgetItem(evento['grupo']))
             self.tabla_asignaciones.setItem(i, 1, QTableWidgetItem(evento['materia']))

@@ -108,9 +108,13 @@ def test_graph_coloring():
     print("\n" + "=" * 70)
     print("📊 Comparación DSatur vs Welsh-Powell")
     print("-" * 70)
-    print(f"Algoritmo       | Tiempo (ms) | Colores | Calidad")
-    print(f"DSatur          | {metricas['tiempo_ejecucion_ms']:>11.2f} | {metricas['colores_usados']:>7} | {metricas['calidad_solucion']:>6.2f}%")
-    print(f"Welsh-Powell    | {metricas2['tiempo_ejecucion_ms']:>11.2f} | {metricas2['colores_usados']:>7} | {metricas2['calidad_solucion']:>6.2f}%")
+    
+    if success and success2:
+        print(f"Algoritmo       | Tiempo (ms) | Colores | Calidad")
+        print(f"DSatur          | {metricas['tiempo_ejecucion_ms']:>11.2f} | {metricas['colores_usados']:>7} | {metricas['calidad_solucion']:>6.2f}%")
+        print(f"Welsh-Powell    | {metricas2['tiempo_ejecucion_ms']:>11.2f} | {metricas2['colores_usados']:>7} | {metricas2['calidad_solucion']:>6.2f}%")
+    else:
+        print("No se pudo completar la comparación debido a errores en la ejecución")
     
     print("\n✅ Todos los tests completados exitosamente!")
     print("=" * 70)

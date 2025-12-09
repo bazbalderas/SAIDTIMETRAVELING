@@ -55,7 +55,7 @@ vector<vector<int>> GrafoEventos::obtener_matriz_adyacencia() const {
 // ==================== IMPLEMENTACIÓN SCHEDULER ====================
 
 Scheduler::Scheduler(int peso_cont, int max_iter, string estrat)
-    : peso_continuidad(peso_cont), max_iteraciones(max_iter), estrategia(estrat), grafo(nullptr) {
+    : grafo(nullptr), peso_continuidad(peso_cont), max_iteraciones(max_iter), estrategia(estrat) {
 }
 
 Scheduler::~Scheduler() {
@@ -306,10 +306,11 @@ bool Scheduler::ejecutar() {
 
 string Scheduler::timeslot_a_dia(int timeslot) {
     const char* dias[] = {"L", "M", "Mi", "J", "V"};
+    const int num_dias = sizeof(dias) / sizeof(dias[0]);
     int slots_por_dia = 14;  // 14 slots de 55 min por día
     int dia = timeslot / slots_por_dia;
     
-    if (dia >= 0 && dia < 5) {
+    if (dia >= 0 && dia < num_dias) {
         return dias[dia];
     }
     return "?";

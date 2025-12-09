@@ -3280,7 +3280,7 @@ static int __pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler___cinit__(s
  *         self.scheduler = new Scheduler(peso_continuidad, max_iteraciones, estrat)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
- *         if self.scheduler != NULL:
+ *         if self.scheduler is not NULL:
  *             del self.scheduler
 */
 
@@ -3303,7 +3303,7 @@ static void __pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler_2__dealloc
   /* "cython_modules/graph_scheduler.pyx":88
  * 
  *     def __dealloc__(self):
- *         if self.scheduler != NULL:             # <<<<<<<<<<<<<<
+ *         if self.scheduler is not NULL:             # <<<<<<<<<<<<<<
  *             del self.scheduler
  * 
 */
@@ -3312,7 +3312,7 @@ static void __pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler_2__dealloc
 
     /* "cython_modules/graph_scheduler.pyx":89
  *     def __dealloc__(self):
- *         if self.scheduler != NULL:
+ *         if self.scheduler is not NULL:
  *             del self.scheduler             # <<<<<<<<<<<<<<
  * 
  *     def agregar_evento(self, int evento_id, str materia, str profesor, str grupo, int horas):
@@ -3322,7 +3322,7 @@ static void __pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler_2__dealloc
     /* "cython_modules/graph_scheduler.pyx":88
  * 
  *     def __dealloc__(self):
- *         if self.scheduler != NULL:             # <<<<<<<<<<<<<<
+ *         if self.scheduler is not NULL:             # <<<<<<<<<<<<<<
  *             del self.scheduler
  * 
 */
@@ -3332,7 +3332,7 @@ static void __pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler_2__dealloc
  *         self.scheduler = new Scheduler(peso_continuidad, max_iteraciones, estrat)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
- *         if self.scheduler != NULL:
+ *         if self.scheduler is not NULL:
  *             del self.scheduler
 */
 
@@ -4297,7 +4297,7 @@ static PyObject *__pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler_14obt
  *             list: Matriz de adyacencia como lista de listas
  *         """
  *         cdef const GrafoEventos* grafo = self.scheduler.obtener_grafo()             # <<<<<<<<<<<<<<
- *         if grafo == NULL:
+ *         if grafo is NULL:
  *             return []
 */
   __pyx_v_grafo = __pyx_v_self->scheduler->obtener_grafo();
@@ -4305,7 +4305,7 @@ static PyObject *__pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler_14obt
   /* "cython_modules/graph_scheduler.pyx":184
  *         """
  *         cdef const GrafoEventos* grafo = self.scheduler.obtener_grafo()
- *         if grafo == NULL:             # <<<<<<<<<<<<<<
+ *         if grafo is NULL:             # <<<<<<<<<<<<<<
  *             return []
  * 
 */
@@ -4314,7 +4314,7 @@ static PyObject *__pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler_14obt
 
     /* "cython_modules/graph_scheduler.pyx":185
  *         cdef const GrafoEventos* grafo = self.scheduler.obtener_grafo()
- *         if grafo == NULL:
+ *         if grafo is NULL:
  *             return []             # <<<<<<<<<<<<<<
  * 
  *         cdef vector[vector[int]] matriz = grafo.obtener_matriz_adyacencia()
@@ -4329,7 +4329,7 @@ static PyObject *__pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler_14obt
     /* "cython_modules/graph_scheduler.pyx":184
  *         """
  *         cdef const GrafoEventos* grafo = self.scheduler.obtener_grafo()
- *         if grafo == NULL:             # <<<<<<<<<<<<<<
+ *         if grafo is NULL:             # <<<<<<<<<<<<<<
  *             return []
  * 
 */
@@ -4528,7 +4528,7 @@ static PyObject *__pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler_16obt
  *             dict: Informacin del grafo (nodos, aristas, grados)
  *         """
  *         cdef const GrafoEventos* grafo = self.scheduler.obtener_grafo()             # <<<<<<<<<<<<<<
- *         if grafo == NULL:
+ *         if grafo is NULL:
  *             return {'nodos': 0, 'aristas': 0}
 */
   __pyx_v_grafo = __pyx_v_self->scheduler->obtener_grafo();
@@ -4536,7 +4536,7 @@ static PyObject *__pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler_16obt
   /* "cython_modules/graph_scheduler.pyx":207
  *         """
  *         cdef const GrafoEventos* grafo = self.scheduler.obtener_grafo()
- *         if grafo == NULL:             # <<<<<<<<<<<<<<
+ *         if grafo is NULL:             # <<<<<<<<<<<<<<
  *             return {'nodos': 0, 'aristas': 0}
  * 
 */
@@ -4545,7 +4545,7 @@ static PyObject *__pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler_16obt
 
     /* "cython_modules/graph_scheduler.pyx":208
  *         cdef const GrafoEventos* grafo = self.scheduler.obtener_grafo()
- *         if grafo == NULL:
+ *         if grafo is NULL:
  *             return {'nodos': 0, 'aristas': 0}             # <<<<<<<<<<<<<<
  * 
  *         cdef int num_nodos = grafo.num_nodos()
@@ -4562,7 +4562,7 @@ static PyObject *__pyx_pf_14cython_modules_15graph_scheduler_11PyScheduler_16obt
     /* "cython_modules/graph_scheduler.pyx":207
  *         """
  *         cdef const GrafoEventos* grafo = self.scheduler.obtener_grafo()
- *         if grafo == NULL:             # <<<<<<<<<<<<<<
+ *         if grafo is NULL:             # <<<<<<<<<<<<<<
  *             return {'nodos': 0, 'aristas': 0}
  * 
 */

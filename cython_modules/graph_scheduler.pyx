@@ -85,7 +85,7 @@ cdef class PyScheduler:
         self.scheduler = new Scheduler(peso_continuidad, max_iteraciones, estrat)
     
     def __dealloc__(self):
-        if self.scheduler != NULL:
+        if self.scheduler is not NULL:
             del self.scheduler
     
     def agregar_evento(self, int evento_id, str materia, str profesor, str grupo, int horas):
@@ -181,7 +181,7 @@ cdef class PyScheduler:
             list: Matriz de adyacencia como lista de listas
         """
         cdef const GrafoEventos* grafo = self.scheduler.obtener_grafo()
-        if grafo == NULL:
+        if grafo is NULL:
             return []
         
         cdef vector[vector[int]] matriz = grafo.obtener_matriz_adyacencia()
@@ -204,7 +204,7 @@ cdef class PyScheduler:
             dict: Información del grafo (nodos, aristas, grados)
         """
         cdef const GrafoEventos* grafo = self.scheduler.obtener_grafo()
-        if grafo == NULL:
+        if grafo is NULL:
             return {'nodos': 0, 'aristas': 0}
         
         cdef int num_nodos = grafo.num_nodos()
