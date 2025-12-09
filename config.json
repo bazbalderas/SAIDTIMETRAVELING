@@ -1,0 +1,14 @@
+{
+  "Horas_Bloque": 55,
+  "Horario_Inicio": "07:00",
+  "Horario_Fin": "21:00",
+  "Dias_Habiles": ["L", "M", "Mi", "J", "V"],
+  "Duracion_Descanso": 30,
+  "Peso_Continuidad": 10,
+  "Max_Iteraciones": 1000,
+  "Estrategia_Coloreado": "DSatur",
+  "Formato_Celda": "Materia + Profesor",
+  "Color_Disponible": "#00FF00",
+  "Color_Ocupado": "#ADD8E6",
+  "Nombre_Archivo_Output": "Horario_Generado.xlsx"
+}

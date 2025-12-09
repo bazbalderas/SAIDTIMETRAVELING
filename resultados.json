@@ -1,0 +1,602 @@
+{
+  "configuracion": {
+    "Horas_Bloque": 55,
+    "Horario_Inicio": "07:00",
+    "Horario_Fin": "21:00",
+    "Dias_Habiles": [
+      "L",
+      "M",
+      "Mi",
+      "J",
+      "V"
+    ],
+    "Duracion_Descanso": 30,
+    "Peso_Continuidad": 10,
+    "Max_Iteraciones": 1000,
+    "Estrategia_Coloreado": "DSatur",
+    "Formato_Celda": "Materia + Profesor",
+    "Color_Disponible": "#00FF00",
+    "Color_Ocupado": "#ADD8E6",
+    "Nombre_Archivo_Output": "Horario_Generado.xlsx"
+  },
+  "metricas": {
+    "tiempo_ejecucion_ms": 0.0,
+    "iteraciones": 20,
+    "colores_usados": 10,
+    "conflictos_totales": 74,
+    "penalizacion_huecos": 0,
+    "calidad_solucion": 100.0
+  },
+  "info_grafo": {
+    "nodos": 19,
+    "aristas": 74,
+    "grados": [
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      5,
+      5,
+      5,
+      5,
+      5,
+      14,
+      5,
+      5,
+      5,
+      5,
+      13,
+      13
+    ],
+    "grado_maximo": 14,
+    "grado_promedio": 7.7894736842105265
+  },
+  "asignaciones": [
+    {
+      "grupo": "ITI 1-1",
+      "materia": "Inglés I",
+      "profesor": "",
+      "horas": 6,
+      "dia": "L",
+      "hora": "09:45",
+      "timeslot": 3
+    },
+    {
+      "grupo": "ITI 1-1",
+      "materia": "Algoritmos",
+      "profesor": "",
+      "horas": 6,
+      "dia": "L",
+      "hora": "10:40",
+      "timeslot": 4
+    },
+    {
+      "grupo": "ITI 1-1",
+      "materia": "Matemáticas Básicas",
+      "profesor": "",
+      "horas": 6,
+      "dia": "L",
+      "hora": "11:35",
+      "timeslot": 5
+    },
+    {
+      "grupo": "ITI 1-1",
+      "materia": "Arquitectura Computadoras",
+      "profesor": "",
+      "horas": 5,
+      "dia": "L",
+      "hora": "12:30",
+      "timeslot": 6
+    },
+    {
+      "grupo": "ITI 1-1",
+      "materia": "Herramientas Ofimáticas",
+      "profesor": "",
+      "horas": 4,
+      "dia": "L",
+      "hora": "13:25",
+      "timeslot": 7
+    },
+    {
+      "grupo": "ITI 1-1",
+      "materia": "Valores del Ser",
+      "profesor": "",
+      "horas": 3,
+      "dia": "L",
+      "hora": "14:20",
+      "timeslot": 8
+    },
+    {
+      "grupo": "ITI 1-1",
+      "materia": "Intro ITI",
+      "profesor": "",
+      "horas": 3,
+      "dia": "L",
+      "hora": "15:15",
+      "timeslot": 9
+    },
+    {
+      "grupo": "ITI 5-1",
+      "materia": "Estructura de Datos",
+      "profesor": "Dr. Said Polanco",
+      "horas": 6,
+      "dia": "L",
+      "hora": "07:55",
+      "timeslot": 1
+    },
+    {
+      "grupo": "ITI 5-1",
+      "materia": "Diseño BD",
+      "profesor": "M.C. Jorge O. Jasso Luna",
+      "horas": 5,
+      "dia": "L",
+      "hora": "08:50",
+      "timeslot": 2
+    },
+    {
+      "grupo": "ITI 5-1",
+      "materia": "Probabilidad",
+      "profesor": "M.C. Maribel Marin Castro",
+      "horas": 6,
+      "dia": "L",
+      "hora": "09:45",
+      "timeslot": 3
+    },
+    {
+      "grupo": "ITI 5-1",
+      "materia": "Ing. Requerimientos",
+      "profesor": "M.S.I. Alma Delia Amaya Vázquez",
+      "horas": 4,
+      "dia": "L",
+      "hora": "10:40",
+      "timeslot": 4
+    },
+    {
+      "grupo": "ITI 5-1",
+      "materia": "Habilidades Org.",
+      "profesor": "Lic. Myriam Ornelas Llerena",
+      "horas": 3,
+      "dia": "L",
+      "hora": "11:35",
+      "timeslot": 5
+    },
+    {
+      "grupo": "ITI 5-1",
+      "materia": "Inglés V",
+      "profesor": "",
+      "horas": 5,
+      "dia": "L",
+      "hora": "07:00",
+      "timeslot": 0
+    },
+    {
+      "grupo": "ITI 8-1",
+      "materia": "Programación WEB",
+      "profesor": "M.I. Arturo G. Mascorro Cienfuegos",
+      "horas": 5,
+      "dia": "L",
+      "hora": "07:00",
+      "timeslot": 0
+    },
+    {
+      "grupo": "ITI 8-1",
+      "materia": "Minería Datos",
+      "profesor": "Dr Jean-Michael Reacher",
+      "horas": 5,
+      "dia": "L",
+      "hora": "09:45",
+      "timeslot": 3
+    },
+    {
+      "grupo": "ITI 8-1",
+      "materia": "Graficación Avanzada",
+      "profesor": "Dr. Marco A. Nuño Maganda",
+      "horas": 6,
+      "dia": "L",
+      "hora": "10:40",
+      "timeslot": 4
+    },
+    {
+      "grupo": "ITI 8-1",
+      "materia": "Negocios Electrónicos",
+      "profesor": "M.S.I. Mario H. Rodriguez Chávez",
+      "horas": 3,
+      "dia": "L",
+      "hora": "11:35",
+      "timeslot": 5
+    },
+    {
+      "grupo": "ITI 8-1",
+      "materia": "Proyectos TI",
+      "profesor": "",
+      "horas": 3,
+      "dia": "L",
+      "hora": "07:55",
+      "timeslot": 1
+    },
+    {
+      "grupo": "ITI 8-1",
+      "materia": "Inglés VIII",
+      "profesor": "",
+      "horas": 5,
+      "dia": "L",
+      "hora": "08:50",
+      "timeslot": 2
+    }
+  ],
+  "conflictos": [
+    {
+      "evento1_id": 0,
+      "evento2_id": 1,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 0,
+      "evento2_id": 2,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 0,
+      "evento2_id": 3,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 0,
+      "evento2_id": 4,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 0,
+      "evento2_id": 5,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 0,
+      "evento2_id": 6,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 0,
+      "evento2_id": 12,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 0,
+      "evento2_id": 17,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 0,
+      "evento2_id": 18,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 1,
+      "evento2_id": 2,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 1,
+      "evento2_id": 3,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 1,
+      "evento2_id": 4,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 1,
+      "evento2_id": 5,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 1,
+      "evento2_id": 6,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 1,
+      "evento2_id": 12,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 1,
+      "evento2_id": 17,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 1,
+      "evento2_id": 18,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 2,
+      "evento2_id": 3,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 2,
+      "evento2_id": 4,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 2,
+      "evento2_id": 5,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 2,
+      "evento2_id": 6,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 2,
+      "evento2_id": 12,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 2,
+      "evento2_id": 17,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 2,
+      "evento2_id": 18,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 3,
+      "evento2_id": 4,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 3,
+      "evento2_id": 5,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 3,
+      "evento2_id": 6,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 3,
+      "evento2_id": 12,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 3,
+      "evento2_id": 17,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 3,
+      "evento2_id": 18,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 4,
+      "evento2_id": 5,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 4,
+      "evento2_id": 6,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 4,
+      "evento2_id": 12,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 4,
+      "evento2_id": 17,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 4,
+      "evento2_id": 18,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 5,
+      "evento2_id": 6,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 5,
+      "evento2_id": 12,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 5,
+      "evento2_id": 17,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 5,
+      "evento2_id": 18,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 6,
+      "evento2_id": 12,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 6,
+      "evento2_id": 17,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 6,
+      "evento2_id": 18,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 7,
+      "evento2_id": 8,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 7,
+      "evento2_id": 9,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 7,
+      "evento2_id": 10,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 7,
+      "evento2_id": 11,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 7,
+      "evento2_id": 12,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 8,
+      "evento2_id": 9,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 8,
+      "evento2_id": 10,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 8,
+      "evento2_id": 11,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 8,
+      "evento2_id": 12,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 9,
+      "evento2_id": 10,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 9,
+      "evento2_id": 11,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 9,
+      "evento2_id": 12,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 10,
+      "evento2_id": 11,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 10,
+      "evento2_id": 12,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 11,
+      "evento2_id": 12,
+      "razon": "Mismo grupo: ITI 5-1"
+    },
+    {
+      "evento1_id": 12,
+      "evento2_id": 17,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 12,
+      "evento2_id": 18,
+      "razon": "Mismo profesor: "
+    },
+    {
+      "evento1_id": 13,
+      "evento2_id": 14,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 13,
+      "evento2_id": 15,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 13,
+      "evento2_id": 16,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 13,
+      "evento2_id": 17,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 13,
+      "evento2_id": 18,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 14,
+      "evento2_id": 15,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 14,
+      "evento2_id": 16,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 14,
+      "evento2_id": 17,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 14,
+      "evento2_id": 18,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 15,
+      "evento2_id": 16,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 15,
+      "evento2_id": 17,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 15,
+      "evento2_id": 18,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 16,
+      "evento2_id": 17,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 16,
+      "evento2_id": 18,
+      "razon": "Mismo grupo: ITI 8-1"
+    },
+    {
+      "evento1_id": 17,
+      "evento2_id": 18,
+      "razon": "Mismo profesor: "
+    }
+  ]
+}

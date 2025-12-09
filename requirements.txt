@@ -5,9 +5,15 @@
 numpy>=1.20.0
 cython>=0.29.0
 
-# Servidor Web API
+# Qt6 para interfaz gráfica
+PyQt6>=6.0.0
+
+# Servidor Web API (opcional)
 flask>=2.0.0
 flask-cors>=3.0.0
+
+# Exportación (opcional)
+# openpyxl>=3.0.0  # Para exportar a Excel
 
 # Desarrollo (opcional)
 # pytest>=6.0.0

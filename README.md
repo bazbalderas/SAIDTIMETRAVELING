@@ -2,37 +2,73 @@
 
 ## Descripción
 
-Sistema automatizado para la generación de horarios universitarios usando el algoritmo de **Búsqueda Tabú** optimizado con **Cython**. Desarrollado para la carrera de Ingeniería en Tecnologías de la Información e Innovación Digital (ITI) de la Universidad Politécnica de Victoria.
+Sistema automatizado para la generación de horarios universitarios con **dos enfoques complementarios**:
 
-### Características Principales
+1. **Graph Coloring** (DSatur/Welsh-Powell) - 🆕 **Nuevo!**
+2. **Búsqueda Tabú** (Metaheurística)
 
-✅ **Algoritmo de Búsqueda Tabú** con optimización Cython para alto rendimiento  
+Desarrollado para la carrera de Ingeniería en Tecnologías de la Información e Innovación Digital (ITI) de la Universidad Politécnica de Victoria.
+
+### 🆕 Graph Coloring System (Recomendado)
+
+El nuevo sistema basado en **teoría de grafos** ofrece:
+
+✅ **Algoritmos DSatur y Welsh-Powell** implementados en C++  
+✅ **Interfaz Qt6** con diseño glassmorphism/cyberpunk  
+✅ **Detección automática de conflictos** (profesores y grupos)  
+✅ **Visualización de grafo** de conflictos y matriz de adyacencia  
+✅ **Penalización por huecos** para mantener continuidad  
+✅ **Configuración en caliente** sin recompilar (config.json)  
+✅ **Ejecución en threads** (no bloquea la UI)  
+✅ **Manejo robusto de errores** con stacktraces  
+
+📖 **Ver documentación completa**: [README_GRAPH_COLORING.md](README_GRAPH_COLORING.md)
+
+🚀 **Inicio rápido**:
+```bash
+./run.sh          # Linux/Mac
+# O manualmente:
+python3 main_qt.py  # Interfaz Qt6
+```
+
+### Búsqueda Tabú (Sistema Original)
+
+✅ **Algoritmo de Búsqueda Tabú** con optimización Cython  
 ✅ **Resolución de restricciones duras** (obligatorias)  
 ✅ **Optimización de restricciones blandas** (preferencias)  
 ✅ **Interfaz web interactiva** con Tailwind CSS  
 ✅ **Visualización de horarios** por grupo, profesor y aula  
-✅ **Análisis de conflictos** en tiempo real  
 ✅ **Exportación** a JSON, HTML, PDF y Excel  
 
 ## Estructura del Proyecto
 
 ```
-sistema-horarios-iti/
+SAIDTIMETRAVELING/
 ├── include/                    # Headers C++
-│   └── estructuras.h          # Definiciones de estructuras
+│   ├── estructuras.h          # Estructuras de datos
+│   └── scheduler.h            # 🆕 Graph Coloring scheduler
 ├── src/                       # Implementaciones C++
-│   └── estructuras.cpp        # Grafos, listas enlazadas
+│   ├── estructuras.cpp        # Grafos, listas enlazadas
+│   └── scheduler.cpp          # 🆕 DSatur, Welsh-Powell
 ├── cython_modules/            # Módulos Cython optimizados
-│   └── busqueda_tabu.pyx     # Algoritmo principal
+│   ├── busqueda_tabu.pyx     # Búsqueda Tabú
+│   └── graph_scheduler.pyx    # 🆕 Wrapper para scheduler C++
 ├── data/                      # Datos de entrada
-│   └── datos_iti.json        # Profesores, materias, grupos
-├── web/                       # Interfaz web
+│   ├── datos_iti.json        # Datos de ejemplo
+│   └── datos_completos.json   # 🆕 31 profesores, 8 grupos
+├── web/                       # Interfaz web (Tabu Search)
 │   ├── index.html            # Página principal
 │   └── app.js                # Lógica de la aplicación
 ├── docs/                      # Documentación
-├── build/                     # Archivos compilados
-├── sistema_horarios.py       # Script principal Python
-└── setup.py                  # Configuración para compilar Cython
+├── main_qt.py                 # 🆕 Aplicación Qt6 principal
+├── sistema_horarios_qt.py     # 🆕 Sistema Graph Coloring (CLI)
+├── sistema_horarios.py        # Sistema Tabu Search
+├── test_graph_coloring.py     # 🆕 Tests para Graph Coloring
+├── config.json                # 🆕 Configuración del sistema
+├── run.sh                     # 🆕 Script launcher
+├── setup.py                   # Configuración para compilar Cython
+├── README.md                  # Este archivo
+└── README_GRAPH_COLORING.md   # 🆕 Documentación Graph Coloring
 ```
 
 ## Requisitos del Sistema
@@ -223,6 +259,44 @@ Sino:
 - **80-89%**: Bueno (revisar manualmente algunas preferencias)
 - **70-79%**: Aceptable (requiere ajustes)
 - **< 70%**: Requiere reoptimización
+
+## Comparación de Enfoques
+
+### Graph Coloring (DSatur/Welsh-Powell)
+
+**Ventajas:**
+- ⚡ Muy rápido (< 100ms para 300 eventos)
+- 🎯 Garantiza no conflictos (hard constraints)
+- 🔍 Fácil de visualizar (grafo explícito)
+- 📊 Solución óptima o casi-óptima para colores
+- 🖥️ Interfaz Qt6 moderna
+
+**Limitaciones:**
+- Restricciones blandas más simples (solo penaliza huecos)
+- Menos flexible para preferencias complejas
+
+**Cuándo usar:**
+- Prioridad: velocidad y garantía de no conflictos
+- Visualización del problema como grafo
+- Datasets grandes (> 200 eventos)
+
+### Búsqueda Tabú (Metaheurística)
+
+**Ventajas:**
+- 🎛️ Muy flexible con restricciones blandas
+- 🔧 Configurable con múltiples pesos
+- 📈 Puede optimizar calidad global
+- 🌐 Interfaz web incluida
+
+**Limitaciones:**
+- ⏱️ Más lento (segundos/minutos)
+- 🎲 Solución no determinista
+- Puede quedar en óptimo local
+
+**Cuándo usar:**
+- Prioridad: calidad y preferencias complejas
+- Tiempo de ejecución no crítico
+- Necesitas interfaz web
 
 ## Solución de Problemas
 
