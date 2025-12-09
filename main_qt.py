@@ -20,6 +20,7 @@ from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer
 from PyQt6.QtGui import QFont, QPalette, QColor, QIcon, QPixmap
 
 from sistema_horarios_qt import SistemaHorarios
+from config_horarios import DIAS_SEMANA, HORAS_INICIO
 
 
 class SchedulerThread(QThread):
@@ -654,7 +655,6 @@ class MainWindow(QMainWindow):
             
             if ruta_grafo and os.path.exists(ruta_grafo):
                 # Cargar y mostrar la imagen
-                from PyQt6.QtGui import QPixmap
                 pixmap = QPixmap(ruta_grafo)
                 
                 # Escalar la imagen si es muy grande
@@ -716,11 +716,8 @@ class MainWindow(QMainWindow):
     
     def mostrar_calendario(self, asignaciones):
         """Muestra el calendario semanal"""
-        # Por simplicidad, solo mostramos un resumen
-        # En una implementación completa, se construiría una vista de calendario completa
-        dias = ["L", "M", "Mi", "J", "V"]
-        horas_inicio = ["07:00", "07:55", "08:50", "09:45", "10:40", "11:35", "12:30",
-                       "13:25", "14:20", "15:15", "16:10", "17:05", "18:00", "18:55", "19:50"]
+        dias = DIAS_SEMANA
+        horas_inicio = HORAS_INICIO
         
         self.tabla_calendario.setRowCount(len(horas_inicio))
         

@@ -11,23 +11,17 @@ from openpyxl.utils import get_column_letter
 from typing import List, Dict
 import json
 from datetime import datetime
+from config_horarios import DIAS_SEMANA, HORAS_INICIO, COLORES_MATERIAS_PASTEL
 
 
 class ExportadorHorarios:
     """Exporta horarios a diferentes formatos"""
     
     def __init__(self):
-        self.dias = ["L", "M", "Mi", "J", "V"]
-        self.horas = [
-            "07:00", "07:55", "08:50", "09:45", "10:40", "11:35", "12:30",
-            "13:25", "14:20", "15:15", "16:10", "17:05", "18:00", "18:55", "19:50"
-        ]
+        self.dias = DIAS_SEMANA
+        self.horas = HORAS_INICIO
         # Paleta de colores para materias (colores pasteles profesionales)
-        self.colores_materias = [
-            "B4E7CE", "FFE5B4", "E5B4FF", "B4D7FF", "FFB4B4",
-            "D4FFB4", "FFD4B4", "B4FFE7", "E7B4FF", "B4FFD4",
-            "FFB4E7", "D4B4FF", "B4E7FF", "FFEBB4", "C4B4FF"
-        ]
+        self.colores_materias = COLORES_MATERIAS_PASTEL
         self.mapa_colores = {}
     
     def _obtener_color_materia(self, materia: str) -> str:
