@@ -8,6 +8,7 @@ Interfaz gráfica con glassmorphism y cyberpunk styling
 import sys
 import json
 import traceback
+import os
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QLabel, QTableWidget, QTableWidgetItem, QScrollArea,
@@ -16,7 +17,7 @@ from PyQt6.QtWidgets import (
     QFileDialog, QHeaderView, QSizePolicy
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer
-from PyQt6.QtGui import QFont, QPalette, QColor, QIcon
+from PyQt6.QtGui import QFont, QPalette, QColor, QIcon, QPixmap
 
 from sistema_horarios_qt import SistemaHorarios
 
@@ -144,6 +145,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.sistema = SistemaHorarios("config.json")
         self.scheduler_thread = None
+        self.grafo_ruta_actual = None
         
         self.init_ui()
         self.aplicar_estilos()
@@ -287,10 +289,22 @@ class MainWindow(QMainWindow):
         grafo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         grafo_layout.addWidget(grafo_label)
         
-        self.grafo_info = QTextEdit()
-        self.grafo_info.setReadOnly(True)
-        self.grafo_info.setPlaceholderText("El grafo se mostrará aquí después de generar horarios...")
-        grafo_layout.addWidget(self.grafo_info)
+        # Scroll area para la imagen del grafo
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        
+        self.grafo_image_label = QLabel()
+        self.grafo_image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.grafo_image_label.setText("El grafo se mostrará aquí después de generar horarios...")
+        self.grafo_image_label.setStyleSheet("color: #00FFFF; padding: 20px;")
+        
+        scroll.setWidget(self.grafo_image_label)
+        grafo_layout.addWidget(scroll)
+        
+        # Botón para guardar grafo
+        save_grafo_btn = QPushButton("💾 Guardar Imagen del Grafo")
+        save_grafo_btn.clicked.connect(self.guardar_grafo)
+        grafo_layout.addWidget(save_grafo_btn)
         
         tabs.addTab(grafo_widget, "📊 Grafo")
         
@@ -633,22 +647,26 @@ class MainWindow(QMainWindow):
         """
         self.metricas_text.setHtml(metricas_text)
         
-        # Info grafo
-        info_grafo = resultados['info_grafo']
-        grafo_text = f"""
-<h3 style='color: #00FFFF;'>🔗 Información del Grafo</h3>
-<p><b>📍 Nodos (eventos):</b> {info_grafo['nodos']}</p>
-<p><b>🔗 Aristas (conflictos):</b> {info_grafo['aristas']}</p>
-<p><b>📊 Grado máximo:</b> {info_grafo['grado_maximo']}</p>
-<p><b>📈 Grado promedio:</b> {info_grafo['grado_promedio']:.2f}</p>
-
-<h3 style='color: #FF00FF;'>📊 Interpretación</h3>
-<p>El grafo representa los conflictos entre eventos (clases). Cada nodo es una clase,
-y cada arista representa un conflicto (mismo profesor o grupo en el mismo horario).</p>
-
-<p><b>Densidad:</b> {info_grafo['aristas'] / (info_grafo['nodos'] * (info_grafo['nodos']-1) / 2) * 100:.1f}%</p>
-        """
-        self.grafo_info.setHtml(grafo_text)
+        # Generar visualización del grafo
+        try:
+            self.statusBar().showMessage("Generando visualización del grafo...")
+            ruta_grafo, stats_grafo = self.sistema.generar_visualizacion_grafo("grafo_conflictos.png")
+            
+            if ruta_grafo and os.path.exists(ruta_grafo):
+                # Cargar y mostrar la imagen
+                from PyQt6.QtGui import QPixmap
+                pixmap = QPixmap(ruta_grafo)
+                
+                # Escalar la imagen si es muy grande
+                if pixmap.width() > 1200:
+                    pixmap = pixmap.scaledToWidth(1200, Qt.TransformationMode.SmoothTransformation)
+                
+                self.grafo_image_label.setPixmap(pixmap)
+                self.grafo_ruta_actual = ruta_grafo
+                self.statusBar().showMessage("Grafo visualizado correctamente")
+        except Exception as e:
+            self.grafo_image_label.setText(f"Error al generar visualización del grafo:\n{str(e)}")
+            print(f"Error al visualizar grafo: {e}")
         
         # Matriz de adyacencia
         self.mostrar_matriz(resultados['matriz_adyacencia'])
@@ -732,6 +750,25 @@ y cada arista representa un conflicto (mismo profesor o grupo en el mismo horari
         self.sistema.exportar_matriz_csv()
         QMessageBox.information(self, "Exportado", "Matriz exportada a matriz_adyacencia.csv")
     
+    def guardar_grafo(self):
+        """Guarda la imagen del grafo en un archivo"""
+        if not self.grafo_ruta_actual or not os.path.exists(self.grafo_ruta_actual):
+            QMessageBox.warning(self, "Advertencia", "Primero genera un horario para visualizar el grafo")
+            return
+        
+        try:
+            file_name, _ = QFileDialog.getSaveFileName(
+                self, "Guardar Imagen del Grafo", "grafo_conflictos.png",
+                "PNG Images (*.png);;All Files (*)"
+            )
+            
+            if file_name:
+                import shutil
+                shutil.copy(self.grafo_ruta_actual, file_name)
+                QMessageBox.information(self, "✓ Guardado", f"Imagen del grafo guardada en:\n{file_name}")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Error al guardar imagen:\n{str(e)}")
+    
     def exportar_json(self):
         """Exporta resultados a JSON"""
         if not self.sistema.resultados:
@@ -742,16 +779,75 @@ y cada arista representa un conflicto (mismo profesor o grupo en el mismo horari
         QMessageBox.information(self, "Exportado", "Resultados exportados a resultados.json")
     
     def exportar_excel(self):
-        """Exporta a Excel (placeholder)"""
-        QMessageBox.information(self, "Excel", 
-                               "Exportación a Excel requiere librería openpyxl.\n"
-                               "Por ahora usa la exportación JSON.")
+        """Exporta TODOS los horarios a Excel"""
+        if not self.sistema.resultados:
+            QMessageBox.warning(self, "Advertencia", "Primero genera un horario")
+            return
+        
+        try:
+            # Seleccionar archivo de salida
+            file_name, _ = QFileDialog.getSaveFileName(
+                self, "Guardar Horarios Excel", "horarios_completos.xlsx",
+                "Excel Files (*.xlsx)"
+            )
+            
+            if file_name:
+                self.statusBar().showMessage("Exportando a Excel...")
+                archivo = self.sistema.exportar_excel_completo(file_name)
+                
+                if archivo:
+                    QMessageBox.information(
+                        self, "✓ Exportado", 
+                        f"Horarios de TODOS los grupos exportados exitosamente a:\n{archivo}\n\n"
+                        "El archivo incluye:\n"
+                        "• Una hoja por cada grupo\n"
+                        "• Hoja resumen con estadísticas\n"
+                        "• Formato profesional con colores"
+                    )
+                    self.statusBar().showMessage("Excel exportado exitosamente")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Error al exportar a Excel:\n{str(e)}")
     
     def exportar_html(self):
-        """Exporta a HTML (placeholder)"""
-        QMessageBox.information(self, "HTML", 
-                               "Exportación HTML en desarrollo.\n"
-                               "Por ahora usa la exportación JSON.")
+        """Exporta TODOS los horarios a HTML"""
+        if not self.sistema.resultados:
+            QMessageBox.warning(self, "Advertencia", "Primero genera un horario")
+            return
+        
+        try:
+            # Seleccionar archivo de salida
+            file_name, _ = QFileDialog.getSaveFileName(
+                self, "Guardar Horarios HTML", "horarios_completos.html",
+                "HTML Files (*.html)"
+            )
+            
+            if file_name:
+                self.statusBar().showMessage("Exportando a HTML...")
+                archivo = self.sistema.exportar_html_completo(file_name)
+                
+                if archivo:
+                    QMessageBox.information(
+                        self, "✓ Exportado", 
+                        f"Horarios de TODOS los grupos exportados exitosamente a:\n{archivo}\n\n"
+                        "El archivo incluye:\n"
+                        "• Tablas de horarios para todos los grupos\n"
+                        "• Diseño responsive y profesional\n"
+                        "• Métricas del algoritmo"
+                    )
+                    self.statusBar().showMessage("HTML exportado exitosamente")
+                    
+                    # Preguntar si desea abrir el archivo
+                    reply = QMessageBox.question(
+                        self, "Abrir archivo", 
+                        "¿Deseas abrir el archivo HTML en el navegador?",
+                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+                    )
+                    
+                    if reply == QMessageBox.StandardButton.Yes:
+                        import webbrowser
+                        webbrowser.open(f"file://{os.path.abspath(archivo)}")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Error al exportar a HTML:\n{str(e)}")
 
 
 def main():

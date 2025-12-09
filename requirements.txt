@@ -12,8 +12,10 @@ PyQt6>=6.0.0
 flask>=2.0.0
 flask-cors>=3.0.0
 
-# Exportación (opcional)
-# openpyxl>=3.0.0  # Para exportar a Excel
+# Exportación y Visualización
+openpyxl>=3.1.0
+matplotlib>=3.7.0
+networkx>=3.0
 
 # Desarrollo (opcional)
 # pytest>=6.0.0
