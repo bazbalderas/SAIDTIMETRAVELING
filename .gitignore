@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.dll
+*.dylib
+
+# Cython
+*.c
+*.cpp.bak
+*.pyx.bak
+
+# Compiled files
+*.o
+*.out
+*.exe
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+*.html
+!web/*.html
+!docs/*.html
+solucion_final.json
+Horario_Generado.xlsx
+*.log
+
+# Test outputs
+/tmp/
