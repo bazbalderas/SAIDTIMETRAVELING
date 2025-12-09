@@ -21,7 +21,29 @@ let appState = {
     dataEntryTab: 'profesores',  // Tab activo en entrada de datos
     intervaloOptimizacion: null,
     cythonDisponible: false,     // Se actualiza al conectar con el servidor
-    motorUsado: 'JavaScript'     // 'Cython' o 'JavaScript'
+    motorUsado: 'JavaScript',    // 'Cython' o 'JavaScript'
+    config: {
+        time_structure: {
+            Horas_Bloque: 55,
+            Horario_Inicio: "07:00",
+            Horario_Fin: "21:00",
+            Dias_Habiles: ["L", "M", "Mi", "J", "V"],
+            Duracion_Descanso: 30
+        },
+        algorithm: {
+            Peso_Continuidad: 10,
+            Max_Iteraciones: 1000,
+            Tolerancia_Aulas: 0,
+            Estrategia_Coloreado: "DSatur",
+            Tamano_Tabu: 20
+        },
+        output: {
+            Nombre_Archivo_Output: "Horario_Generado_V3.xlsx",
+            Formato_Celda: "Materia + Profesor",
+            Color_Disponible: "#00FF00",
+            Color_Ocupado: "#ADD8E6"
+        }
+    }
 };
 
 // Paleta de colores para materias
@@ -156,6 +178,11 @@ const screens = {
         title: "Análisis de Conflictos",
         icon: "alert",
         component: renderConflicts
+    },
+    configuration: {
+        title: "Configuración del Sistema",
+        icon: "settings",
+        component: renderConfiguration
     }
 };
 
@@ -379,9 +406,9 @@ function renderProfesoresTab() {
             </div>
         </div>
         <div class="border border-gray-200 rounded-xl overflow-hidden shadow-lg">
-            <div class="overflow-x-auto max-h-96">
+            <div class="overflow-y-auto max-h-96">
                 <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50 sticky top-0">
+                    <thead class="bg-gray-50 sticky top-0 z-10">
                         <tr>
                             <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">ID</th>
                             <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">Nombre</th>
@@ -417,9 +444,9 @@ function renderMateriasTab() {
             <h3 class="text-xl font-bold text-gray-800">Materias - ${appState.materias.length} Registros</h3>
         </div>
         <div class="border border-gray-200 rounded-xl overflow-hidden shadow-lg">
-            <div class="overflow-x-auto max-h-96">
+            <div class="overflow-y-auto max-h-96">
                 <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50 sticky top-0">
+                    <thead class="bg-gray-50 sticky top-0 z-10">
                         <tr>
                             <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">ID</th>
                             <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">Nombre</th>
@@ -511,9 +538,9 @@ function renderAsignacionesTab() {
                 class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
         </div>
         <div class="border border-gray-200 rounded-xl overflow-hidden shadow-lg">
-            <div class="overflow-x-auto max-h-96">
+            <div class="overflow-y-auto max-h-96">
                 <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50 sticky top-0">
+                    <thead class="bg-gray-50 sticky top-0 z-10">
                         <tr>
                             <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">Grupo</th>
                             <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">Materia</th>
@@ -934,6 +961,309 @@ function renderConflicts() {
     }
 }
 
+function renderConfiguration() {
+    const content = document.getElementById('screen-content');
+    const config = appState.config;
+    
+    content.innerHTML = `
+        <div class="space-y-6">
+            <!-- Header -->
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                <p class="text-blue-800">
+                    <strong>Configuración del Sistema:</strong> Personaliza los parámetros del algoritmo de generación de horarios. Los cambios se guardan automáticamente.
+                </p>
+            </div>
+            
+            <!-- Time Structure Configuration -->
+            <div class="border border-gray-200 rounded-xl p-6 bg-white shadow-lg">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    ${icon('clock')} Configuración de Tiempo y Estructura
+                </h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Duración de Bloque (minutos)</label>
+                        <input type="number" id="config-horas-bloque" value="${config.time_structure.Horas_Bloque}" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Duración de cada bloque de clase</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Duración de Descanso (minutos)</label>
+                        <input type="number" id="config-duracion-descanso" value="${config.time_structure.Duracion_Descanso}" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Tiempo de receso entre bloques</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Horario de Inicio</label>
+                        <input type="time" id="config-horario-inicio" value="${config.time_structure.Horario_Inicio}" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Hora de inicio de clases</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Horario de Fin</label>
+                        <input type="time" id="config-horario-fin" value="${config.time_structure.Horario_Fin}" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Hora de finalización de clases</p>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Días Hábiles</label>
+                        <div class="flex gap-2 flex-wrap">
+                            ${['L', 'M', 'Mi', 'J', 'V', 'S', 'D'].map(dia => {
+                                const checked = config.time_structure.Dias_Habiles.includes(dia) ? 'checked' : '';
+                                return `
+                                    <label class="flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                        <input type="checkbox" class="config-dia-habil" value="${dia}" ${checked}>
+                                        <span class="text-sm">${dia}</span>
+                                    </label>
+                                `;
+                            }).join('')}
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Selecciona los días de la semana con clases</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Algorithm Configuration -->
+            <div class="border border-gray-200 rounded-xl p-6 bg-white shadow-lg">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    ${icon('settings')} Configuración del Algoritmo
+                </h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Peso de Continuidad</label>
+                        <input type="number" id="config-peso-continuidad" value="${config.algorithm.Peso_Continuidad}" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Penalización por clases no consecutivas</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Máximo de Iteraciones</label>
+                        <input type="number" id="config-max-iteraciones" value="${config.algorithm.Max_Iteraciones}" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Iteraciones máximas del algoritmo</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tamaño Tabú</label>
+                        <input type="number" id="config-tamano-tabu" value="${config.algorithm.Tamano_Tabu}" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Tamaño de la lista tabú</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tolerancia de Aulas</label>
+                        <input type="number" id="config-tolerancia-aulas" value="${config.algorithm.Tolerancia_Aulas}" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Tolerancia en capacidad de aulas</p>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Estrategia de Coloreado</label>
+                        <select id="config-estrategia-coloreado" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="DSatur" ${config.algorithm.Estrategia_Coloreado === 'DSatur' ? 'selected' : ''}>DSatur (Grado de Saturación)</option>
+                            <option value="WelshPowell" ${config.algorithm.Estrategia_Coloreado === 'WelshPowell' ? 'selected' : ''}>Welsh-Powell</option>
+                            <option value="Greedy" ${config.algorithm.Estrategia_Coloreado === 'Greedy' ? 'selected' : ''}>Greedy (Codicioso)</option>
+                            <option value="Backtracking" ${config.algorithm.Estrategia_Coloreado === 'Backtracking' ? 'selected' : ''}>Backtracking</option>
+                        </select>
+                        <p class="text-xs text-gray-500 mt-1">Algoritmo de asignación de franjas horarias</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Output Configuration -->
+            <div class="border border-gray-200 rounded-xl p-6 bg-white shadow-lg">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    ${icon('download')} Configuración de Salida
+                </h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre de Archivo de Salida</label>
+                        <input type="text" id="config-nombre-archivo" value="${config.output.Nombre_Archivo_Output}" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Nombre del archivo Excel generado</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Formato de Celda</label>
+                        <select id="config-formato-celda" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="Materia + Profesor" ${config.output.Formato_Celda === 'Materia + Profesor' ? 'selected' : ''}>Materia + Profesor</option>
+                            <option value="Materia" ${config.output.Formato_Celda === 'Materia' ? 'selected' : ''}>Solo Materia</option>
+                            <option value="Profesor" ${config.output.Formato_Celda === 'Profesor' ? 'selected' : ''}>Solo Profesor</option>
+                            <option value="Codigo" ${config.output.Formato_Celda === 'Codigo' ? 'selected' : ''}>Código de Materia</option>
+                        </select>
+                        <p class="text-xs text-gray-500 mt-1">Información mostrada en cada celda</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Color de Disponible</label>
+                        <div class="flex gap-2">
+                            <input type="color" id="config-color-disponible" value="${config.output.Color_Disponible}" 
+                                class="w-16 h-10 border border-gray-300 rounded cursor-pointer">
+                            <input type="text" id="config-color-disponible-text" value="${config.output.Color_Disponible}" 
+                                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Color para franjas disponibles</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Color de Ocupado</label>
+                        <div class="flex gap-2">
+                            <input type="color" id="config-color-ocupado" value="${config.output.Color_Ocupado}" 
+                                class="w-16 h-10 border border-gray-300 rounded cursor-pointer">
+                            <input type="text" id="config-color-ocupado-text" value="${config.output.Color_Ocupado}" 
+                                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Color para franjas ocupadas</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex justify-end gap-3">
+                <button onclick="resetearConfiguracion()" 
+                    class="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-semibold shadow-md flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Resetear a Valores por Defecto
+                </button>
+                <button onclick="guardarConfiguracion()" 
+                    class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-md flex items-center gap-2">
+                    ${icon('check')}
+                    Guardar Configuración
+                </button>
+            </div>
+            
+            <!-- Info Box -->
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+                <p class="text-yellow-800 text-sm">
+                    <strong>Nota:</strong> Los cambios en la configuración se aplicarán en la próxima generación de horarios. La configuración se guarda automáticamente en localStorage.
+                </p>
+            </div>
+        </div>
+    `;
+    
+    // Setup color picker sync
+    setupColorPickerSync();
+}
+
+function setupColorPickerSync() {
+    // Sync color pickers with text inputs
+    const colorDisponible = document.getElementById('config-color-disponible');
+    const colorDisponibleText = document.getElementById('config-color-disponible-text');
+    const colorOcupado = document.getElementById('config-color-ocupado');
+    const colorOcupadoText = document.getElementById('config-color-ocupado-text');
+    
+    if (colorDisponible && colorDisponibleText) {
+        colorDisponible.addEventListener('input', (e) => {
+            colorDisponibleText.value = e.target.value.toUpperCase();
+        });
+        colorDisponibleText.addEventListener('input', (e) => {
+            if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+                colorDisponible.value = e.target.value;
+            }
+        });
+    }
+    
+    if (colorOcupado && colorOcupadoText) {
+        colorOcupado.addEventListener('input', (e) => {
+            colorOcupadoText.value = e.target.value.toUpperCase();
+        });
+        colorOcupadoText.addEventListener('input', (e) => {
+            if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+                colorOcupado.value = e.target.value;
+            }
+        });
+    }
+}
+
+function guardarConfiguracion() {
+    try {
+        // Gather all config values
+        const diasHabiles = Array.from(document.querySelectorAll('.config-dia-habil:checked'))
+            .map(cb => cb.value);
+        
+        appState.config = {
+            time_structure: {
+                Horas_Bloque: parseInt(document.getElementById('config-horas-bloque').value),
+                Horario_Inicio: document.getElementById('config-horario-inicio').value,
+                Horario_Fin: document.getElementById('config-horario-fin').value,
+                Dias_Habiles: diasHabiles,
+                Duracion_Descanso: parseInt(document.getElementById('config-duracion-descanso').value)
+            },
+            algorithm: {
+                Peso_Continuidad: parseInt(document.getElementById('config-peso-continuidad').value),
+                Max_Iteraciones: parseInt(document.getElementById('config-max-iteraciones').value),
+                Tolerancia_Aulas: parseInt(document.getElementById('config-tolerancia-aulas').value),
+                Estrategia_Coloreado: document.getElementById('config-estrategia-coloreado').value,
+                Tamano_Tabu: parseInt(document.getElementById('config-tamano-tabu').value)
+            },
+            output: {
+                Nombre_Archivo_Output: document.getElementById('config-nombre-archivo').value,
+                Formato_Celda: document.getElementById('config-formato-celda').value,
+                Color_Disponible: document.getElementById('config-color-disponible-text').value.toUpperCase(),
+                Color_Ocupado: document.getElementById('config-color-ocupado-text').value.toUpperCase()
+            }
+        };
+        
+        // Save to localStorage
+        localStorage.setItem('horario_config', JSON.stringify(appState.config));
+        
+        // Try to save to config.json file (if backend supports it)
+        // This would require a backend endpoint
+        
+        console.log('[INFO] Configuración guardada:', appState.config);
+        alert('✓ Configuración guardada exitosamente!');
+        
+    } catch (error) {
+        console.error('[ERROR] Error al guardar configuración:', error);
+        mostrarErrorModal(error, 'No se pudo guardar la configuración');
+    }
+}
+
+function resetearConfiguracion() {
+    if (!confirm('¿Estás seguro de que quieres resetear la configuración a los valores por defecto?')) {
+        return;
+    }
+    
+    // Reset to default values
+    appState.config = {
+        time_structure: {
+            Horas_Bloque: 55,
+            Horario_Inicio: "07:00",
+            Horario_Fin: "21:00",
+            Dias_Habiles: ["L", "M", "Mi", "J", "V"],
+            Duracion_Descanso: 30
+        },
+        algorithm: {
+            Peso_Continuidad: 10,
+            Max_Iteraciones: 1000,
+            Tolerancia_Aulas: 0,
+            Estrategia_Coloreado: "DSatur",
+            Tamano_Tabu: 20
+        },
+        output: {
+            Nombre_Archivo_Output: "Horario_Generado_V3.xlsx",
+            Formato_Celda: "Materia + Profesor",
+            Color_Disponible: "#00FF00",
+            Color_Ocupado: "#ADD8E6"
+        }
+    };
+    
+    // Save and re-render
+    localStorage.setItem('horario_config', JSON.stringify(appState.config));
+    renderConfiguration();
+    
+    console.log('[INFO] Configuración reseteada a valores por defecto');
+    alert('✓ Configuración reseteada a valores por defecto');
+}
+
+function cargarConfiguracion() {
+    try {
+        const configGuardada = localStorage.getItem('horario_config');
+        if (configGuardada) {
+            appState.config = JSON.parse(configGuardada);
+            console.log('[INFO] Configuración cargada desde localStorage');
+        }
+    } catch (error) {
+        console.warn('[WARN] No se pudo cargar la configuración guardada:', error);
+    }
+}
+
 // ==================== FUNCIONES DE ACCIONES ====================
 
 async function cargarDatosPrueba() {
@@ -1110,160 +1440,190 @@ function exportarHorario() {
 }
 
 async function iniciarOptimizacion() {
-    // Verificar que hay datos cargados
-    if (!appState.profesores.length || !appState.materias.length || !appState.grupos.length) {
-        alert('Error: Primero debes cargar los datos (profesores, materias, grupos)');
-        return;
-    }
-    
-    const log = document.getElementById('log-container');
-    const maxIter = parseInt(document.getElementById('max-iter').value) || 1000;
-    const tamanoTabu = parseInt(document.getElementById('tabu-size').value) || 20;
-    
-    appState.optimizando = true;
-    document.getElementById('progress-section').style.display = 'block';
-    
-    log.innerHTML = `<p>[${new Date().toLocaleTimeString()}] Iniciando Sistema de Optimización...</p>`;
-    
-    // ========== INTENTAR USAR CYTHON (SERVIDOR) ==========
-    if (USAR_CYTHON) {
-        log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Conectando con servidor Cython...</p>`;
+    try {
+        // Verificar que hay datos cargados
+        if (!appState.profesores.length || !appState.materias.length || !appState.grupos.length) {
+            throw new Error('Primero debes cargar los datos (profesores, materias, grupos)');
+        }
+        
+        const log = document.getElementById('log-container');
+        // Use configuration values if available
+        const maxIter = parseInt(document.getElementById('max-iter').value) || appState.config.algorithm.Max_Iteraciones;
+        const tamanoTabu = parseInt(document.getElementById('tabu-size').value) || appState.config.algorithm.Tamano_Tabu;
+        
+        appState.optimizando = true;
+        document.getElementById('progress-section').style.display = 'block';
+        
+        log.innerHTML = `<p>[${new Date().toLocaleTimeString()}] Iniciando Sistema de Optimización...</p>`;
+        log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Usando configuración: Max Iter=${maxIter}, Tamaño Tabú=${tamanoTabu}</p>`;
+        
+        // ========== INTENTAR USAR CYTHON (SERVIDOR) ==========
+        if (USAR_CYTHON) {
+            log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Conectando con servidor Cython...</p>`;
+            log.scrollTop = log.scrollHeight;
+            
+            try {
+                // Paso 1: Generar eventos en el servidor
+                log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Generando eventos iniciales...</p>`;
+                const resEventos = await fetch(`${API_BASE}/generar_eventos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (!resEventos.ok) {
+                    const errorData = await resEventos.json().catch(() => ({}));
+                    throw new Error(`Error al generar eventos: ${errorData.message || resEventos.statusText}`);
+                }
+                const dataEventos = await resEventos.json();
+                log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] ${dataEventos.num_eventos} eventos generados</p>`;
+                
+                // Actualizar barra de progreso
+                document.getElementById('progress-bar').style.width = '20%';
+                document.getElementById('iter-actual').textContent = '0';
+                document.getElementById('iter-max').textContent = maxIter;
+                
+                // Paso 2: Ejecutar optimización con Cython
+                log.innerHTML += `<p class="text-cyan-400">[${new Date().toLocaleTimeString()}] 🚀 Ejecutando Búsqueda Tabú con CYTHON...</p>`;
+                log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Parámetros: ${maxIter} iteraciones, tamaño tabú: ${tamanoTabu}</p>`;
+                log.scrollTop = log.scrollHeight;
+                
+                document.getElementById('progress-bar').style.width = '40%';
+                
+                const resOptimizar = await fetch(`${API_BASE}/optimizar`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        max_iteraciones: maxIter,
+                        tamano_tabu: tamanoTabu
+                    })
+                });
+                
+                if (!resOptimizar.ok) {
+                    const errorData = await resOptimizar.json().catch(() => ({}));
+                    throw new Error(`Error en optimización: ${errorData.message || resOptimizar.statusText}`);
+                }
+                const dataOptimizar = await resOptimizar.json();
+                
+                document.getElementById('progress-bar').style.width = '100%';
+                
+                if (dataOptimizar.success) {
+                    // Actualizar estado con resultados de Cython
+                    appState.eventos = dataOptimizar.eventos;
+                    appState.solucion = dataOptimizar.solucion;
+                    appState.motorUsado = dataOptimizar.motor;
+                    
+                    // Mostrar métricas
+                    document.getElementById('conflictos-value').textContent = dataOptimizar.solucion.conflictos_duros;
+                    document.getElementById('penalizacion-value').textContent = dataOptimizar.solucion.penalizacion_blandas || 0;
+                    document.getElementById('calidad-value').textContent = `${dataOptimizar.solucion.calidad.toFixed(1)}%`;
+                    document.getElementById('iter-actual').textContent = maxIter;
+                    
+                    log.innerHTML += `<p class="text-green-400">[${new Date().toLocaleTimeString()}] ✓ Optimización completada con ${dataOptimizar.motor}!</p>`;
+                    log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Conflictos duros: ${dataOptimizar.solucion.conflictos_duros}</p>`;
+                    log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Calidad: ${dataOptimizar.solucion.calidad.toFixed(1)}%</p>`;
+                    
+                    // Guardar localmente
+                    guardarHorarioLocal();
+                    log.innerHTML += `<p class="text-yellow-400">[${new Date().toLocaleTimeString()}] ✓ Horario guardado en localStorage</p>`;
+                    
+                    appState.optimizando = false;
+                    alert(`¡Horario generado con ${dataOptimizar.motor}!\nCalidad: ${dataOptimizar.solucion.calidad.toFixed(1)}%`);
+                    return;
+                } else {
+                    throw new Error(dataOptimizar.message || 'Error desconocido en optimización');
+                }
+                
+            } catch (error) {
+                console.warn('[WARN] Error con servidor Cython:', error.message);
+                log.innerHTML += `<p class="text-orange-400">[${new Date().toLocaleTimeString()}] ⚠ Servidor Cython no disponible: ${error.message}</p>`;
+                log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Usando algoritmo JavaScript local...</p>`;
+                log.scrollTop = log.scrollHeight;
+                // Continue to fallback
+            }
+        }
+        
+        // ========== FALLBACK: ALGORITMO JAVASCRIPT LOCAL ==========
+        log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Ejecutando Búsqueda Tabú en JavaScript...</p>`;
+        appState.motorUsado = 'JavaScript';
+        
+        // Generar eventos si no existen
+        if (!appState.eventos.length) {
+            generarEventosIniciales();
+        }
+        
+        log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Eventos generados: ${appState.eventos.length}</p>`;
         log.scrollTop = log.scrollHeight;
         
-        try {
-            // Paso 1: Generar eventos en el servidor
-            log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Generando eventos iniciales...</p>`;
-            const resEventos = await fetch(`${API_BASE}/generar_eventos`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            });
-            
-            if (!resEventos.ok) throw new Error('Error al generar eventos');
-            const dataEventos = await resEventos.json();
-            log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] ${dataEventos.num_eventos} eventos generados</p>`;
-            
-            // Actualizar barra de progreso
-            document.getElementById('progress-bar').style.width = '20%';
-            document.getElementById('iter-actual').textContent = '0';
-            document.getElementById('iter-max').textContent = maxIter;
-            
-            // Paso 2: Ejecutar optimización con Cython
-            log.innerHTML += `<p class="text-cyan-400">[${new Date().toLocaleTimeString()}] 🚀 Ejecutando Búsqueda Tabú con CYTHON...</p>`;
-            log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Parámetros: ${maxIter} iteraciones, tamaño tabú: ${tamanoTabu}</p>`;
-            log.scrollTop = log.scrollHeight;
-            
-            document.getElementById('progress-bar').style.width = '40%';
-            
-            const resOptimizar = await fetch(`${API_BASE}/optimizar`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    max_iteraciones: maxIter,
-                    tamano_tabu: tamanoTabu
-                })
-            });
-            
-            if (!resOptimizar.ok) throw new Error('Error en optimización');
-            const dataOptimizar = await resOptimizar.json();
-            
-            document.getElementById('progress-bar').style.width = '100%';
-            
-            if (dataOptimizar.success) {
-                // Actualizar estado con resultados de Cython
-                appState.eventos = dataOptimizar.eventos;
-                appState.solucion = dataOptimizar.solucion;
-                appState.motorUsado = dataOptimizar.motor;
+        let iter = 0;
+        const interval = setInterval(() => {
+            try {
+                iter += 10;
+                const progreso = (iter / maxIter) * 100;
                 
-                // Mostrar métricas
-                document.getElementById('conflictos-value').textContent = dataOptimizar.solucion.conflictos_duros;
-                document.getElementById('penalizacion-value').textContent = dataOptimizar.solucion.penalizacion_blandas || 0;
-                document.getElementById('calidad-value').textContent = `${dataOptimizar.solucion.calidad.toFixed(1)}%`;
-                document.getElementById('iter-actual').textContent = maxIter;
+                document.getElementById('progress-bar').style.width = `${progreso}%`;
+                document.getElementById('iter-actual').textContent = iter;
+                document.getElementById('iter-max').textContent = maxIter;
                 
-                log.innerHTML += `<p class="text-green-400">[${new Date().toLocaleTimeString()}] ✓ Optimización completada con ${dataOptimizar.motor}!</p>`;
-                log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Conflictos duros: ${dataOptimizar.solucion.conflictos_duros}</p>`;
-                log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Calidad: ${dataOptimizar.solucion.calidad.toFixed(1)}%</p>`;
+                // Simular mejora
+                const conflictos = Math.max(0, Math.floor(12 - (iter / maxIter) * 12));
+                const penalizacion = Math.floor(250 - (iter / maxIter) * 100);
+                const calidad = Math.min(100, (iter / maxIter) * 95);
                 
-                // Guardar localmente
-                guardarHorarioLocal();
-                log.innerHTML += `<p class="text-yellow-400">[${new Date().toLocaleTimeString()}] ✓ Horario guardado en localStorage</p>`;
+                document.getElementById('conflictos-value').textContent = conflictos;
+                document.getElementById('penalizacion-value').textContent = penalizacion;
+                document.getElementById('calidad-value').textContent = `${calidad.toFixed(0)}%`;
                 
+                if (iter % 100 === 0) {
+                    log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Iteración ${iter} - Conflictos: ${conflictos}, Calidad: ${calidad.toFixed(0)}%</p>`;
+                    log.scrollTop = log.scrollHeight;
+                }
+                
+                if (iter >= maxIter) {
+                    clearInterval(interval);
+                    appState.optimizando = false;
+                    
+                    // Optimizar distribución de eventos
+                    optimizarEventos();
+                    
+                    appState.solucion = {
+                        conflictos_duros: conflictos,
+                        penalizacion_blandas: penalizacion,
+                        calidad: calidad,
+                        fecha: new Date().toISOString(),
+                        optimizado_con: 'JavaScript'
+                    };
+                    
+                    // Guardar automáticamente
+                    guardarHorarioLocal();
+                    
+                    log.innerHTML += `<p class="text-yellow-400">[${new Date().toLocaleTimeString()}] ✓ Optimización completada (JavaScript)!</p>`;
+                    log.innerHTML += `<p class="text-green-400">[${new Date().toLocaleTimeString()}] ✓ Horario guardado</p>`;
+                    log.scrollTop = log.scrollHeight;
+                    
+                    alert('Horario generado y guardado exitosamente!');
+                    navigateTo('dashboard');
+                }
+            } catch (intervalError) {
+                clearInterval(interval);
                 appState.optimizando = false;
-                alert(`¡Horario generado con ${dataOptimizar.motor}!\nCalidad: ${dataOptimizar.solucion.calidad.toFixed(1)}%`);
-                return;
-            } else {
-                throw new Error(dataOptimizar.message || 'Error desconocido');
+                throw intervalError;
             }
-            
-        } catch (error) {
-            console.warn('[WARN] Error con servidor Cython:', error.message);
-            log.innerHTML += `<p class="text-orange-400">[${new Date().toLocaleTimeString()}] ⚠ Servidor Cython no disponible: ${error.message}</p>`;
-            log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Usando algoritmo JavaScript local...</p>`;
-            log.scrollTop = log.scrollHeight;
+        }, 50);
+        
+    } catch (error) {
+        // Handle any errors that occur during optimization
+        appState.optimizando = false;
+        console.error('[ERROR] Error durante optimización:', error);
+        
+        // Hide progress section
+        const progressSection = document.getElementById('progress-section');
+        if (progressSection) {
+            progressSection.style.display = 'none';
         }
+        
+        // Show error modal
+        mostrarErrorModal(error, 'Error al intentar generar el horario. Verifica que los datos estén correctamente cargados y que el servidor backend esté ejecutándose si intentas usar el modo Cython.');
     }
-    
-    // ========== FALLBACK: ALGORITMO JAVASCRIPT LOCAL ==========
-    log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Ejecutando Búsqueda Tabú en JavaScript...</p>`;
-    appState.motorUsado = 'JavaScript';
-    
-    // Generar eventos si no existen
-    if (!appState.eventos.length) {
-        generarEventosIniciales();
-    }
-    
-    log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Eventos generados: ${appState.eventos.length}</p>`;
-    log.scrollTop = log.scrollHeight;
-    
-    let iter = 0;
-    const interval = setInterval(() => {
-        iter += 10;
-        const progreso = (iter / maxIter) * 100;
-        
-        document.getElementById('progress-bar').style.width = `${progreso}%`;
-        document.getElementById('iter-actual').textContent = iter;
-        document.getElementById('iter-max').textContent = maxIter;
-        
-        // Simular mejora
-        const conflictos = Math.max(0, Math.floor(12 - (iter / maxIter) * 12));
-        const penalizacion = Math.floor(250 - (iter / maxIter) * 100);
-        const calidad = Math.min(100, (iter / maxIter) * 95);
-        
-        document.getElementById('conflictos-value').textContent = conflictos;
-        document.getElementById('penalizacion-value').textContent = penalizacion;
-        document.getElementById('calidad-value').textContent = `${calidad.toFixed(0)}%`;
-        
-        if (iter % 100 === 0) {
-            log.innerHTML += `<p>[${new Date().toLocaleTimeString()}] Iteración ${iter} - Conflictos: ${conflictos}, Calidad: ${calidad.toFixed(0)}%</p>`;
-            log.scrollTop = log.scrollHeight;
-        }
-        
-        if (iter >= maxIter) {
-            clearInterval(interval);
-            appState.optimizando = false;
-            
-            // Optimizar distribución de eventos
-            optimizarEventos();
-            
-            appState.solucion = {
-                conflictos_duros: conflictos,
-                penalizacion_blandas: penalizacion,
-                calidad: calidad,
-                fecha: new Date().toISOString(),
-                optimizado_con: 'JavaScript'
-            };
-            
-            // Guardar automáticamente
-            guardarHorarioLocal();
-            
-            log.innerHTML += `<p class="text-yellow-400">[${new Date().toLocaleTimeString()}] ✓ Optimización completada (JavaScript)!</p>`;
-            log.innerHTML += `<p class="text-green-400">[${new Date().toLocaleTimeString()}] ✓ Horario guardado</p>`;
-            log.scrollTop = log.scrollHeight;
-            
-            alert('Horario generado y guardado exitosamente!');
-            navigateTo('dashboard');
-        }
-    }, 50);
 }
 
 function detenerOptimizacion() {
@@ -1986,10 +2346,194 @@ function limpiarHorarioLocal() {
     }
 }
 
+// ==================== ERROR HANDLING ====================
+
+function mostrarErrorModal(error, detalles = '') {
+    const timestamp = new Date().toLocaleString('es-MX');
+    const errorMsg = error?.message || error?.toString() || 'Error desconocido';
+    const stack = error?.stack || 'No stack trace available';
+    
+    // Log to console
+    console.error('[ERROR]', errorMsg, error);
+    
+    // Save to error log
+    guardarErrorLog(errorMsg, detalles, stack);
+    
+    // Create modal HTML
+    const modalHTML = `
+        <div id="error-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+                <!-- Header -->
+                <div class="bg-red-600 text-white px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        <h3 class="text-xl font-bold">Error en la Generación de Horarios</h3>
+                    </div>
+                    <button onclick="cerrarErrorModal()" class="text-white hover:text-gray-200 text-2xl">&times;</button>
+                </div>
+                
+                <!-- Body -->
+                <div class="p-6 overflow-y-auto max-h-[60vh]">
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-2">Mensaje de Error:</h4>
+                            <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                                <p class="text-red-800 font-mono text-sm">${errorMsg}</p>
+                            </div>
+                        </div>
+                        
+                        ${detalles ? `
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-2">Detalles:</h4>
+                            <div class="bg-gray-50 border border-gray-200 p-4 rounded">
+                                <p class="text-gray-700 text-sm">${detalles}</p>
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-2">Stack Trace:</h4>
+                            <div class="bg-gray-900 text-green-400 p-4 rounded overflow-x-auto">
+                                <pre class="text-xs font-mono">${stack.substring(0, 500)}${stack.length > 500 ? '...' : ''}</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 border border-blue-200 p-4 rounded">
+                            <h4 class="font-semibold text-blue-800 mb-2">Sugerencias:</h4>
+                            <ul class="list-disc list-inside text-sm text-blue-700 space-y-1">
+                                <li>Verifica que los datos de entrada sean correctos</li>
+                                <li>Asegúrate de que el servidor backend esté ejecutándose</li>
+                                <li>Revisa el archivo log.txt para más detalles</li>
+                                <li>Intenta recargar la página y volver a intentarlo</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="text-xs text-gray-500">
+                            Timestamp: ${timestamp}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t">
+                    <button onclick="descargarErrorLog()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+                        ${iconSmall('download')}
+                        <span>Descargar Log</span>
+                    </button>
+                    <button onclick="cerrarErrorModal()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove existing modal if any
+    const existingModal = document.getElementById('error-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Add modal to body
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+function cerrarErrorModal() {
+    const modal = document.getElementById('error-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function guardarErrorLog(mensaje, detalles, stack) {
+    try {
+        const timestamp = new Date().toISOString();
+        const logEntry = {
+            timestamp,
+            mensaje,
+            detalles,
+            stack,
+            userAgent: navigator.userAgent,
+            appState: {
+                profesores: appState.profesores.length,
+                materias: appState.materias.length,
+                grupos: appState.grupos.length,
+                eventos: appState.eventos.length,
+                motorUsado: appState.motorUsado
+            }
+        };
+        
+        // Get existing logs
+        let logs = [];
+        try {
+            const storedLogs = localStorage.getItem('error_logs');
+            if (storedLogs) {
+                logs = JSON.parse(storedLogs);
+            }
+        } catch (e) {
+            console.warn('Could not retrieve existing logs');
+        }
+        
+        // Add new log (keep last 10)
+        logs.push(logEntry);
+        logs = logs.slice(-10);
+        
+        // Save back
+        localStorage.setItem('error_logs', JSON.stringify(logs));
+        
+        console.log('[INFO] Error logged to localStorage');
+    } catch (error) {
+        console.error('[ERROR] Could not save error log:', error);
+    }
+}
+
+function descargarErrorLog() {
+    try {
+        const logs = localStorage.getItem('error_logs');
+        if (!logs) {
+            alert('No hay logs de error para descargar');
+            return;
+        }
+        
+        const logData = JSON.parse(logs);
+        const logText = logData.map(log => {
+            return `
+================================================================================
+TIMESTAMP: ${log.timestamp}
+MENSAJE: ${log.mensaje}
+DETALLES: ${log.detalles || 'N/A'}
+ESTADO: ${JSON.stringify(log.appState, null, 2)}
+USER AGENT: ${log.userAgent}
+STACK TRACE:
+${log.stack}
+================================================================================
+`;
+        }).join('\n\n');
+        
+        const blob = new Blob([logText], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `log_${new Date().toISOString().replace(/[:.]/g, '-')}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        console.log('[INFO] Log descargado');
+    } catch (error) {
+        console.error('[ERROR] Could not download log:', error);
+        alert('Error al descargar el log');
+    }
+}
+
 // ==================== INICIALIZACIÓN ====================
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('[INFO] Sistema de Horarios ITI cargado');
+    
+    // Cargar configuración guardada
+    cargarConfiguracion();
     
     // Intentar cargar horario guardado
     const horarioCargado = cargarHorarioLocal();

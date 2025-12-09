@@ -1,0 +1,22 @@
+{
+  "time_structure": {
+    "Horas_Bloque": 55,
+    "Horario_Inicio": "07:00",
+    "Horario_Fin": "21:00",
+    "Dias_Habiles": ["L", "M", "Mi", "J", "V"],
+    "Duracion_Descanso": 30
+  },
+  "algorithm": {
+    "Peso_Continuidad": 10,
+    "Max_Iteraciones": 1000,
+    "Tolerancia_Aulas": 0,
+    "Estrategia_Coloreado": "DSatur",
+    "Tamano_Tabu": 20
+  },
+  "output": {
+    "Nombre_Archivo_Output": "Horario_Generado_V3.xlsx",
+    "Formato_Celda": "Materia + Profesor",
+    "Color_Disponible": "#00FF00",
+    "Color_Ocupado": "#ADD8E6"
+  }
+}
