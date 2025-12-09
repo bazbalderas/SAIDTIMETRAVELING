@@ -9,6 +9,8 @@ import json
 import os
 from typing import Dict, List, Tuple
 from cython_modules.graph_scheduler import PyScheduler
+from exportador_horarios import ExportadorHorarios
+from visualizacion_grafo import VisualizadorGrafo
 
 
 class ConfiguracionSistema:
@@ -238,6 +240,58 @@ class SistemaHorarios:
             json.dump(datos_export, f, indent=2, ensure_ascii=False)
         
         print(f"✓ Resultados exportados a {archivo_salida}")
+    
+    def exportar_excel_completo(self, archivo_salida: str = "horarios_completos.xlsx"):
+        """Exporta TODOS los horarios a Excel"""
+        if not self.resultados:
+            print("No hay resultados para exportar")
+            return None
+        
+        exportador = ExportadorHorarios()
+        archivo = exportador.exportar_excel(
+            self.resultados['asignaciones'],
+            self.eventos,
+            self.resultados['metricas'],
+            archivo_salida
+        )
+        print(f"✓ Horarios exportados a Excel: {archivo}")
+        return archivo
+    
+    def exportar_html_completo(self, archivo_salida: str = "horarios_completos.html"):
+        """Exporta TODOS los horarios a HTML"""
+        if not self.resultados:
+            print("No hay resultados para exportar")
+            return None
+        
+        exportador = ExportadorHorarios()
+        archivo = exportador.exportar_html(
+            self.resultados['asignaciones'],
+            self.eventos,
+            self.resultados['metricas'],
+            self.resultados['info_grafo'],
+            archivo_salida
+        )
+        print(f"✓ Horarios exportados a HTML: {archivo}")
+        return archivo
+    
+    def generar_visualizacion_grafo(self, archivo_salida: str = "grafo_conflictos.png"):
+        """Genera visualización del grafo de conflictos"""
+        if not self.resultados:
+            print("No hay resultados para visualizar")
+            return None, None
+        
+        visualizador = VisualizadorGrafo()
+        visualizador.crear_grafo_desde_matriz(
+            self.resultados['matriz_adyacencia'],
+            self.resultados['asignaciones'],
+            self.eventos
+        )
+        
+        ruta = visualizador.visualizar(archivo_salida)
+        stats = visualizador.obtener_estadisticas()
+        
+        print(f"✓ Grafo visualizado en: {ruta}")
+        return ruta, stats
 
 
 def main():

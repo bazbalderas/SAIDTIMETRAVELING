@@ -307,7 +307,7 @@ bool Scheduler::ejecutar() {
 string Scheduler::timeslot_a_dia(int timeslot) {
     const char* dias[] = {"L", "M", "Mi", "J", "V"};
     const int num_dias = sizeof(dias) / sizeof(dias[0]);
-    int slots_por_dia = 14;  // 14 slots de 55 min por día
+    int slots_por_dia = 15;  // 15 slots de 55 min por día (7:00 a 19:50)
     int dia = timeslot / slots_por_dia;
     
     if (dia >= 0 && dia < num_dias) {
@@ -317,7 +317,7 @@ string Scheduler::timeslot_a_dia(int timeslot) {
 }
 
 string Scheduler::timeslot_a_hora(int timeslot, int duracion_bloque) {
-    int slots_por_dia = 14;
+    int slots_por_dia = 15;  // 15 slots de 55 min por día
     int slot_en_dia = timeslot % slots_por_dia;
     
     // Hora de inicio: 7:00 AM
