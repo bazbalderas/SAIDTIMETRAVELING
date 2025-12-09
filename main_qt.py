@@ -150,6 +150,9 @@ class MainWindow(QMainWindow):
         
         self.init_ui()
         self.aplicar_estilos()
+        
+        # Cargar datos por defecto
+        QTimer.singleShot(100, self.cargar_datos_iniciales)
     
     def init_ui(self):
         """Inicializa la interfaz de usuario"""
@@ -564,6 +567,18 @@ class MainWindow(QMainWindow):
         except Exception as e:
             error_dialog = ErrorDialog(str(e) + "\n\n" + traceback.format_exc(), self)
             error_dialog.exec()
+            
+    def cargar_datos_iniciales(self):
+        """Intenta cargar datos_iti_usuario.json al inicio"""
+        ruta_datos = os.path.join("data", "datos_iti_usuario.json")
+        if os.path.exists(ruta_datos):
+            try:
+                self.sistema.cargar_datos(ruta_datos)
+                self.actualizar_tabla_profesores()
+                self.statusBar().showMessage(f"Datos cargados automáticamente: {ruta_datos}")
+                print(f"Datos cargados automáticamente desde {ruta_datos}")
+            except Exception as e:
+                print(f"Error al cargar datos iniciales: {e}")
     
     def actualizar_tabla_profesores(self):
         """Actualiza la tabla de profesores"""
@@ -571,7 +586,7 @@ class MainWindow(QMainWindow):
         
         for i, profesor in enumerate(self.sistema.profesores):
             nombre_item = QTableWidgetItem(profesor['nombre'])
-            horas_item = QTableWidgetItem(str(profesor['max_horas']))
+            horas_item = QTableWidgetItem(str(profesor.get('max_horas', 'N/A')))
             
             self.tabla_profesores.setItem(i, 0, nombre_item)
             self.tabla_profesores.setItem(i, 1, horas_item)
