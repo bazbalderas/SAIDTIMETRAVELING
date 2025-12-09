@@ -79,32 +79,71 @@ class SistemaHorarios:
         self.profesores = datos.get('profesores', [])
         self.grupos = datos.get('grupos', [])
         self.materias = datos.get('materias', [])
+        self.asignaciones_data = datos.get('asignaciones', {})
         
         print(f"✓ Cargados {len(self.profesores)} profesores")
         print(f"✓ Cargados {len(self.grupos)} grupos")
         print(f"✓ Cargadas {len(self.materias)} materias")
+        print(f"✓ Cargadas asignaciones para {len(self.asignaciones_data)} grupos")
     
     def generar_eventos(self):
-        """Genera eventos a partir de las materias"""
+        """Genera eventos a partir de las asignaciones"""
         self.eventos = []
         evento_id = 0
         
-        for materia in self.materias:
-            grupo = materia['grupo']
-            nombre_materia = materia['materia']
-            horas = materia['horas']
-            profesor = materia.get('profesor', 'Sin asignar')
-            
-            # Crear un evento por cada materia
-            evento = {
-                'id': evento_id,
-                'grupo': grupo,
-                'materia': nombre_materia,
-                'profesor': profesor,
-                'horas': horas
-            }
-            self.eventos.append(evento)
-            evento_id += 1
+        # Crear diccionarios de búsqueda rápida
+        profesores_dict = {p['id']: p['nombre'] for p in self.profesores}
+        materias_dict = {m['id']: m for m in self.materias}
+        grupos_dict = {g['id']: g['nombre'] for g in self.grupos}
+        
+        # Si hay asignaciones (formato datos_iti_usuario.json)
+        if self.asignaciones_data:
+            for grupo_id_str, materias_asignadas in self.asignaciones_data.items():
+                grupo_id = int(grupo_id_str)
+                nombre_grupo = grupos_dict.get(grupo_id, f"Grupo {grupo_id}")
+                
+                for materia_id_str, profesor_id in materias_asignadas.items():
+                    materia_id = int(materia_id_str)
+                    
+                    materia_info = materias_dict.get(materia_id)
+                    if not materia_info:
+                        continue
+                        
+                    nombre_materia = materia_info['nombre']
+                    horas = materia_info['horas_semanales']
+                    nombre_profesor = profesores_dict.get(profesor_id, "Sin asignar")
+                    
+                    # Crear evento
+                    evento = {
+                        'id': evento_id,
+                        'grupo': nombre_grupo,
+                        'materia': nombre_materia,
+                        'profesor': nombre_profesor,
+                        'horas': horas,
+                        'materia_id': materia_id,
+                        'profesor_id': profesor_id,
+                        'grupo_id': grupo_id
+                    }
+                    self.eventos.append(evento)
+                    evento_id += 1
+                    
+        # Si no hay asignaciones, intentar formato antiguo (datos_completos.json)
+        elif self.materias and 'grupo' in self.materias[0]:
+            for materia in self.materias:
+                grupo = materia['grupo']
+                nombre_materia = materia['materia']
+                horas = materia['horas']
+                profesor = materia.get('profesor', 'Sin asignar')
+                
+                evento = {
+                    'id': evento_id,
+                    'grupo': grupo,
+                    'materia': nombre_materia,
+                    'profesor': profesor,
+                    'horas': horas
+                }
+                self.eventos.append(evento)
+                evento_id += 1
         
         print(f"✓ Generados {len(self.eventos)} eventos")
         return self.eventos
