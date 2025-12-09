@@ -202,7 +202,6 @@ class VisualizadorGrafo:
     
     def _agregar_leyenda(self):
         """Agrega una leyenda explicativa al grafo"""
-        from matplotlib.patches import Rectangle
         from matplotlib.lines import Line2D
         
         # Elementos de la leyenda

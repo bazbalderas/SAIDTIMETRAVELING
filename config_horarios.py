@@ -37,8 +37,8 @@ def validar_configuracion():
     """Valida que la configuración sea consistente"""
     assert len(HORAS_INICIO) == SLOTS_POR_DIA, \
         f"Inconsistencia: HORAS_INICIO tiene {len(HORAS_INICIO)} elementos, pero SLOTS_POR_DIA={SLOTS_POR_DIA}"
-    assert TOTAL_TIMESLOTS == 75, \
-        f"Error: TOTAL_TIMESLOTS debe ser 75, pero es {TOTAL_TIMESLOTS}"
+    assert TOTAL_TIMESLOTS == NUM_DIAS * SLOTS_POR_DIA, \
+        f"Error: TOTAL_TIMESLOTS debe ser {NUM_DIAS * SLOTS_POR_DIA}, pero es {TOTAL_TIMESLOTS}"
     print("✓ Configuración validada correctamente")
 
 if __name__ == "__main__":

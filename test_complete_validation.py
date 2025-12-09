@@ -6,6 +6,7 @@ Test de validación del sistema completo (sin Qt GUI)
 
 import os
 import sys
+from openpyxl import load_workbook
 
 def test_complete_system():
     """Prueba el sistema completo sin GUI"""
@@ -81,7 +82,6 @@ def test_complete_system():
             print(f"   ✓ Excel: {archivo_excel} ({size:.1f} KB)")
             
             # Verificar contenido del Excel
-            from openpyxl import load_workbook
             wb = load_workbook(archivo_excel)
             print(f"   ✓ Hojas en Excel: {len(wb.sheetnames)}")
             print(f"   ✓ Hojas: {', '.join(wb.sheetnames[:5])}...")

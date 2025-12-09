@@ -7,7 +7,6 @@ Exporta horarios a Excel y HTML de forma profesional
 
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
-from openpyxl.utils import get_column_letter
 from typing import List, Dict
 import json
 from datetime import datetime
